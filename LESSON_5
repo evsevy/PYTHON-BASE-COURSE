@@ -1,0 +1,51 @@
+# MATH
+# навести стрелку на math и нажать ctrl - вывод библиотеки
+from math import*
+# from math import sin, cos - для конкретного импортирования
+# r=sin(x)**2+cos(x)**2
+
+print(math.sqrt(4)) #можно и без math
+
+math import
+print(math.sqrt(4))
+
+print(int(math.sqrt(4)))
+
+# Для удобства:
+
+a=16
+
+a=int(math.sqrt(a))
+# a=int(math.pow(a, 4))
+# a = -4 # a=int(math.fabs(a))
+# a=int(math.log2(a))
+# a=int(math.factorial(a))
+a=(math.e)
+a=math.degrees(math.cos(a)) # перевести в радианы в градусы
+print(a)
+
+"""
+math.pow (x) - в степень
+math.fabs(x) - модуль
+abs(x) - модуль
+math.log2(x) - логарифм х по основанию 2
+math.factorial -
+math.pi = 3.14
+math.e=2.7
+math.degrees(x в радианах) -
+math.radians(x) -
+math.cos(x) -
+"""
+
+# ПРИМЕР:
+x = float(input())
+r=math.sin(x)**2+math.cos(x)**2
+print(r)
+
+import random
+# import random as rnd    c псевдонимом
+
+n=random.random()
+m=random.randint(10,100)
+print(n)
+print(m)
