@@ -1,0 +1,129 @@
+# МЕТАПРОГРАММИРОВАНИЕ
+
+# MRO: ПОРЯДОК РАЗРЕШЕНИЯ МЕТОДОВ
+"""
+представляет собой линеаризацию (построение линейного вида) иерархии классов.
+Алгоритм позволяет разрешить возможные конфликтные ситуации при множественном наследовании (конфликт методов, проблема ромба).
+"""
+class X:
+    pass
+
+class Y:
+    pass
+
+class Z:
+    pass
+
+class A(X, Y):
+    pass
+
+class B(Y, Z):
+    pass
+
+class M(B, A, Z):
+    pass
+
+print(M.mro())
+#print(M.__mro__)
+
+"""
+Декоратор  – это вызываемый объект, который принимает другую функцию в качестве аргумента (декорируемую функцию).
+"""
+
+@decorate
+def target():
+    print('running target()')
+эквивалентен такому:
+
+def target():
+    print('running target()')
+target = decorate(target)
+
+@deco
+def target():
+    print('running target()')
+
+>>> target()
+>>> target
+<function deco.<locals>.inner at 0x10063b598>
+
+
+# ITERATORS
+Итератор — это объект, у которого есть:
+метод __iter__ , который возвращает сам объект;
+метод __next__, который возвращает следующий элемент. 
+Если все элементы уже возвращены, метод вызывает исключение StopIteration.
+>>> d = [1,2,3,4,5,56,6]
+>>> iter(d)
+<list_iterator object at 0x01F984D0>
+>>> i=iter(d)
+>>> next(i)
+1
+>>> list(range(30))
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]
+#Принцип итерации - распаковка!
+Самая очевидная форма распаковки кортежа – параллельное присваивание, 
+т. е. присваивание элементов итерируемого объекта кортежу переменных:
+
+lax_coordinates = (33.9425, -118.408056)
+latitude, longitude = lax_coordinates # распаковка
+
+>>>latitude
+33.9425
+>>> longitude
+-118.408056
+"""
+#GENERATORS
+def greeting():
+    print('Привет!!')
+    yield 1
+    print('Как дела?')
+    yield 2
+    print('Ты тут?')
+    yield 3
+messenger = greeting()
+
+result = next(messenger)
+print(result)
+
+# MATCH/CASE
+
+def load():
+   print("Загружаем")
+def save():
+   print("Сохраняем")
+def default():
+   print("Неизвестно как обработать")
+
+def main(value):
+   if isinstance(value, str) and value == "load":
+       load()
+   elif isinstance(value, str) and value == "save":
+       save()
+   else:
+       default()
+  """    
+main("load")
+>>> Загружаем
+main("save")
+>>> Сохраняем
+main("hello")
+>>> Неизвестно как обработать
+"""
+def main(value):
+   match value:
+       case "load":
+           load()
+       case "save":
+           save()
+       case _:
+           default()
+           """
+main("load")
+>>> Загружаем
+main("save")
+>>> Сохраняем
+main(5645)
+>>> Неизвестно как обработать
+"""
+
