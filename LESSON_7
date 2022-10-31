@@ -1,0 +1,214 @@
+# LESSON_7
+#Встроенные функции:
+
+class A:
+    x: float=5.1
+
+A.y = 'TEXT'
+print(A.x)
+del A.x
+print(A.__dict__)
+
+########################################
+class B:
+    a: int=50
+    b: int=25
+
+print(getattr(B, 'a') + getattr(B, 'b'))
+###################################################
+class UpC:
+
+pass
+
+setattr(UpC, 'x', 100)
+UpC.y = 'python'
+print(getattr(UpC, 'y').upper())
+
+print(UpC.__dict__)
+#####################################
+class Del:
+    a: int = 10
+    b: float = 10.5
+    
+
+del Del.a
+print(getattr(Del, 'a', 'no!'))
+delattr(Del, 'b')
+print(Del.__dict__)
+
+class Word(str):
+    '''Класс для слов, определяющий сравнение по длине слов.'''
+
+    def __new__(cls, word):
+        # Мы должны использовать __new__, так как тип str неизменяемый
+        # и мы должны инициализировать его раньше (при создании)
+
+class Test:
+    def __init_subclass__(cls, /, test_param, **kwargs):
+        super().__init_subclass__(**kwargs)
+>>>         cls.test_param = test_param
+>>>
+>>> class AnotherTest(Test, test_param="Hello World"):
+>>>     pass
+#################################################
+class Test:
+    def __repr__(self):
+        return ""
+
+Test()
+... ''
+################################################
+>>> class Test:
+>>>     def __iter__(self):
+>>>         return (1, 2, 3)
+>>>
+>>> for value in Test():
+>>>     print(value)
+... 1
+... 2
+... 3
+###############################################
+>>> class Test:
+>>>     def __call__(self, message):
+>>>         print(message)
+>>>         return True
+>>>
+>>> test = Test()
+>>> test("Love")
+... 'Love'
+... True
+
+"""
+Если у класс реализовать магический метод __call__ , 
+то экземпляр такого класса можно будет вызывать как функцию, при этом, очевидно, будет вызываться просто этот самый магический метод. 
+Такой объект называют функтором. Пример:
+"""
+class Functor:
+    def __call__(self, a, b):
+        print(a * b)
+f = Functor()
+# вызов как будто функция
+f(10, 20)
+###############################################
+>>> from dataclasses import dataclass
+# IMPORT
+>>> @dataclass(init=True, repr=True, eq=True, order=True, unsafe_hash=True)
+>>> class Person:
+>>>     first_name: str
+>>>     last_name: str
+>>>     age: int
+################################################
+# getter
+    @property
+    def name(self):
+            return self._name
+    # setter
+    @name.setter
+    def name(self, n):
+            if(n != "Иван"):
+                self._name = n
+ """
+    Декоратор @property облегчает создание свойств в классах Python. 
+    Свойства выглядят как обычные атрибуты (поля) класса, 
+    но при их чтении вызывается геттер (getter), при записи – сеттер (setter), 
+    а при удалении – делитер (deleter). Геттер и делитер опциональны. 
+    Декоратор @property возвращает объект-дескриптор.
+    """
+class Ball:
+    def __init__(self):
+        self.__weight = 0
+
+    @property
+    def weight(self):
+        return self.__weight
+
+    @weight.setter
+    def weight(self, new_weight):
+        if new_weight < 0:
+            raise ValueError('negative weight')
+        self.__weight = new_weight
+
+b = Ball()
+b.weight = 100
+print(b.weight)  # 100
+b.weight = -10  # ValueError
+##################################################
+# @classmethod
+    class Person:
+    @classmethod
+    def group(cls, n):
+        # cls именно тот класс, который вызвал
+        return [cls() for _ in range(n)]
+
+    def __repr__(self):
+        return 'Person'
+
+class Worker(Person):
+    def __repr__(self):
+        return 'Worker'
+
+print(Person.group(3))
+# [Person, Person, Person]
+print(Worker.group(2))
+# [Worker, Worker]
+##################################################
+from contextlib import contextmanager
+
+@contextmanager
+def my_open(name, mode='r'):
+    # тут код для получения ресурса
+    f = open(name, mode)
+    print('Файл открыт:', name)
+
+    try:
+        yield f
+    finally:
+        # Code to release resource, e.g.:
+        f.close()
+        print('Файл закрыт:', name)
+
+
+# использование
+with my_open('1.txt', 'w') as f:
+    f.write('Hello')
+    f.fooooo()  # <- error
+
+# Файл открыт: 1.txt
+# Traceback (most recent call last):
+# Файл закрыт: 1.txt
+#####################################################
+#ВРАППЕР
+from functools import wraps
+
+def repeat(_func=None, *, num_times=2):
+    def decorator_repeat(func):
+        @wraps(func)
+        def wrapper_repeat(*args, **kwargs):
+            value = None
+            for _ in range(num_times):
+                value = func(*args, **kwargs)
+            return value
+        return wrapper_repeat
+
+    if _func is None:
+        return decorator_repeat
+    else:
+        return decorator_repeat(_func)
+
+@repeat(num_times=5)
+def foo():
+    print('текст')
+
+foo()
+
+#######################################
+from selenium import webdriver
+
+driver = webdriver.Firefox()
+driver.get("http://www.google.com")
+
+elem = driver.find_element_by_name("q")
+elem.send_keys("Hello WebDriver!")
+elem.submit()
+
+print(driver.title)
