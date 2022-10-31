@@ -1,0 +1,167 @@
+# DECORATORS
+
+def decorator1(function):
+    def wrapper():
+        print('this is first message')
+        function()
+        print ('this is second message')
+    return wrapper
+def decorator2():
+    print('this is 3rd message')
+decorator2 = decorator1(decorator2)
+decorator2()
+
+def decorator1(f):
+    def wrapped():
+        return '*****' + f() + '*****'
+    return wrapped
+    
+def decorator2(f):
+    def wrapped():
+        return '+++' + f() + '+++'
+    return wrapped
+@decorator1
+@decorator2
+def function():
+    return 'Python 3.8'
+print(function())
+
+"""
+"""
+def decorator1(function):
+    def wrapper():
+        func = function()
+        splitted_string = func.split()
+        return splitted_string
+    
+    return wrapper
+    
+def decorator2uppercase(function):
+    def wrapper():
+        func = function()
+        make_uppercase = func.upper()
+        return make_uppercase
+    return wrapper
+    
+@decorator1
+@decorator2uppercase
+def say_hi():
+    return 'python is good language'
+print(say_hi())
+
+"""
+
+
+# magic methods (dunder methods)
+
+#CLASS
+class Car:
+ 
+    # Конструктор класса
+def __init__(self, marka, speed):
+        # Назначаем свойство marka
+    self.marka = marka
+        # Назначаем свойство speed
+    self.speed = speed
+        # Выводим свойства через метод show_properties()
+ 
+    # Создаём магический метод __str__()
+def __str__(self):
+        # Возвращаем строку для вывода
+    return "marka: {} \nspeed: {} km/ch".format(self.marka, self.speed)
+ 
+ 
+def main():
+    # Создаём объект класса Car
+bmv = Car("BMV", 200)
+    # Выводим в консоль
+print(bmv)
+"""
+def __add__(self, a):
+    return self.speed + a
+    """
+    
+    """
+__sub__() — Вычитание;
+__mul__() — Умножение;
+__truediv__() — Деление (x/y);
+__floordiv__() — Целочисленное деление (x // y);
+__mod__() — Остаток от деления;
+__pow__() — Возведение в степень;
+
+# Магические методы преобразования типов
+
+__int__(self) Преобразование типа в int.
+__long__(self) Преобразование типа в long.
+__float__(self) Преобразование типа в float.
+__complex__(self) Преобразование типа в комплексное число.
+__oct__(self) ...
+__hex__(self) ...
+__index__(self) ...
+__trunc__(self)
+
+"""
+class Mine:
+    def __init__(self):
+        self.x = 2
+        self.__y = 3 Двойное подчеркивание определяет __y как приватную переменную
+    def print_y(self):
+        print(self.__y)
+
+"""Создайте экземпляр класса с использованием этого определения:"""
+m = Mine()
+"""Переменная x приватной не является, поэтому к ней можно обратиться напрямую:"""
+print(m.x)
+"""Переменная __y является приватной. При попытке обратиться к ней напрямую
+инициируется ошибка:"""
+>>> print(m.__y)
+Traceback (innermost last):
+ File "<stdin>", line 1, in ?
+AttributeError: 'Mine' object has no attribute '__y'
+"""Метод print_y не является приватным, а поскольку он принадлежит классу Mine,он может обратиться к переменной __y и вывести ее значение:"""
+>>> m.print_y()
+
+# __getattr__ и __setattr__
+
+class Product:
+    def __init__(self, name):
+...         self.name = name
+... 
+... def __getattr__(self, item):
+...     if item == "formatted_name":
+...         print(f"__getattr__ is called for {item}")
+...         formatted = self.name.capitalize()
+...         setattr(self, "formatted_name", formatted)
+...         return formatted
+...     else:
+...         raise AttributeError(f"no attribute of {item}")
+... 
+def __setattr__(self, key, value):
+    print(f"__setattr__ is called for {key!r}: {value!r}")
+super().__setattr__(key, value)
+
+>>> product = Product("taBLe")
+__setattr__ is called for 'name': 'taBLe'
+>>> product.name
+'taBLe'
+>>> product.formatted_name
+__getattr__ is called for formatted_name
+__setattr__ is called for 'formatted_name': 'Table'
+'Table'
+>>> product.formatted_name
+'Table'
+
+# тернарный оператор
+def get_type_of_sentence(sentence):
+    last_char = sentence[-1]
+    if last_char == '?':
+        return 'question'
+    return 'normal'
+Стало:
+
+def get_type_of_sentence(sentence):
+    last_char = sentence[-1]
+    return 'question' if last_char == '?' else 'normal'
+
+print(get_type_of_sentence('Hodor'))   # => normal
+print(get_type_of_sentence('Hodor?'))  # => question
