@@ -1,0 +1,331 @@
+################## LESSON_9 ##########################
+# ITERATORS
+
+# define a list
+my_list = [4, 7, 0, 3]
+
+# get an iterator using iter()
+my_iter = iter(my_list)
+
+# iterate through it using next()
+
+# Output: 4
+print(next(my_iter))
+
+# Output: 7
+print(next(my_iter))
+
+# next(obj) is same as obj.__next__()
+
+# Output: 0
+print(my_iter.__next__())
+
+# Output: 3
+print(my_iter.__next__())
+
+# This will raise error, no items left
+next(my_iter)
+
+for element in my_list:
+    print(element)
+
+#################################################
+class PowTwo:
+    """Class to implement an iterator
+    of powers of two"""
+
+    def __init__(self, max=0):
+        self.max = max
+
+    def __iter__(self):
+        self.n = 0
+        return self
+
+    def __next__(self):
+        if self.n <= self.max:
+            result = 2 ** self.n
+            self.n += 1
+            return result
+        else:
+            raise StopIteration
+
+
+# create an object
+numbers = PowTwo(3)
+
+# create an iterable from the object
+i = iter(numbers)
+
+# Using next to get to the next iterator element
+print(next(i))
+print(next(i))
+print(next(i))
+print(next(i))
+print(next(i))
+############################################################
+
+tumb = ["ПОРТФЕЛЬ", "ПАПКА", "ДИРЕКТОРИЯ", "ФАЙЛ"]
+# получаем итератор для итерируемого объекта
+it = iter(tumb)
+
+try:
+    while True:
+        next_val = next(it)
+        print("СТРУКТУРА:", next_val)
+except StopIteration:
+    # явно напечатаем сообщение об окончании итерации,
+    # хотя цикл for этого не делает и ошибка просто подавляется
+    print("Итерация закончена!")
+print("THE END")
+###########################################################
+
+class SimpleIterator:
+    def __iter__(self):
+        return self
+
+    def __init__(self, limit):
+        self.limit = limit
+        self.counter = 0
+
+    def __next__(self):
+        if self.counter < self.limit:
+            ret = self.counter
+            self.counter += 1
+            return ret
+        else:
+            raise StopIteration
+
+iters = SimpleIterator(50)
+
+# По итератору можно двигаться с помощью функции next()
+print('Функция next:', next(iters))
+print('Функция next:', next(iters))
+
+for i in iters:
+    print('Цикл for ... in: ', i)
+    #next(iters)
+
+"""
+Как ни странно, вопрос о разнице между генераторами и итераторами в Python - довольно частый вопрос.
+В общем-то эти сущности сильно связаны (любой генератор - это итератор), их довольно часто путают, 
+что иногда приводит к недопониманиям. Итератор - более общая концепция. 
+Это объект, у которого определены два метода __next__ и __iter__. 
+С другой стороны, генератор - это итератор. Но не наоборот. Генератор может получаться использованием yield в теле функции.
+"""
+def squares(start, stop):
+    for i in range(start, stop):
+        yield i * i
+generator = squares(a, b)
+#Либо использованием так называемых generator expression. На вроде такого:
+generator = (i*i for i in range(a, b))
+"""
+Если посмотреть dir(generator) и в первом и во втором случае, то обнаружим, 
+что оба варианта - итераторы (определены функции __next__ и __iter__). 
+По большому счету генераторы - это синтаксический сахар. И без них можно писать такие же эффективные программы используя только итераторы. 
+Вот только читаемость и простота кода сильно снизятся. Так что, если не нужно от итератора ничего сверх естественного, 
+то стоит подумать над использованием генератора.
+"""
+#sample syntax of python generator 
+
+def gereratorName(argument): 
+#statements 
+    yield argument 
+#statements 
+#calling the generator 
+variableName = gereratorName(10) 
+print(variableName)
+print(next(variableName))
+##############################################################
+#fruits is a generator which generates some fruit name 
+def fruits(): 
+    yield "Mango" 
+    yield "Jackfruit" 
+    yield "Banana" 
+    yield "Guava" 
+    #calling the generator 
+getfruits = fruits() 
+print(next(getfruits)) 
+print(next(getfruits)) 
+print(next(getfruits)) 
+print(next(getfruits))
+
+###########################################################
+ИСКЛЮЧЕНИЯ: TRY/EXEPT
+
+a, b = 1, 0
+try:
+    print(a/b)
+    print("Это не будет напечатано")
+    print('10'+10)
+except TypeError:
+    print("Вы сложили значения несовместимых типов")
+except ZeroDivisionError:
+    print("Деление на 0")
+##########################################################
+
+RAISE/ASSERT
+
+a,b=int(input()),int(input())
+try:
+    if b==0:
+        raise ZeroDivisionError
+except:
+   print("/ 0")
+print("exeption")
+try:
+    print(1)
+    assert 2+2==4
+    print(2)
+    assert 1+2==4
+    print(3)
+except:
+    print("assert False.")
+    raise
+finally:
+    print("Ok")
+    """
+    Обзор исключений
+BaseException - базовое исключение, от которого берут начало все остальные.
+SystemExit - исключение, порождаемое функцией sys.exit при выходе из программы.
+KeyboardInterrupt - порождается при прерывании программы пользователем (обычно сочетанием клавиш Ctrl+C).
+GeneratorExit - порождается при вызове метода close объекта generator.
+Exception - а вот тут уже заканчиваются полностью системные исключения (которые лучше не трогать) и начинаются обыкновенные, с которыми можно работать.
+StopIteration - порождается встроенной функцией next, если в итераторе больше нет элементов.
+ArithmeticError - арифметическая ошибка.
+FloatingPointError - порождается при неудачном выполнении операции с плавающей запятой. На практике встречается нечасто.
+OverflowError - возникает, когда результат арифметической операции слишком велик для представления. Не появляется при обычной работе с целыми числами (так как python поддерживает длинные числа), но может возникать в некоторых других случаях.
+ZeroDivisionError - деление на ноль.
+AssertionError - выражение в функции assert ложно.
+AttributeError - объект не имеет данного атрибута (значения или метода).
+BufferError - операция, связанная с буфером, не может быть выполнена.
+EOFError - функция наткнулась на конец файла и не смогла прочитать то, что хотела.
+ImportError - не удалось импортирование модуля или его атрибута.
+LookupError - некорректный индекс или ключ.
+IndexError - индекс не входит в диапазон элементов.
+KeyError - несуществующий ключ (в словаре, множестве или другом объекте).
+MemoryError - недостаточно памяти.
+NameError - не найдено переменной с таким именем.
+UnboundLocalError - сделана ссылка на локальную переменную в функции, но переменная не определена ранее.
+OSError - ошибка, связанная с системой.
+BlockingIOError
+ChildProcessError - неудача при операции с дочерним процессом.
+ConnectionError - базовый класс для исключений, связанных с подключениями.
+BrokenPipeError
+ConnectionAbortedError
+ConnectionRefusedError
+ConnectionResetError
+FileExistsError - попытка создания файла или директории, которая уже существует.
+FileNotFoundError - файл или директория не существует.
+InterruptedError - системный вызов прерван входящим сигналом.
+IsADirectoryError - ожидался файл, но это директория.
+NotADirectoryError - ожидалась директория, но это файл.
+PermissionError - не хватает прав доступа.
+ProcessLookupError - указанного процесса не существует.
+TimeoutError - закончилось время ожидания.
+ReferenceError - попытка доступа к атрибуту со слабой ссылкой.
+RuntimeError - возникает, когда исключение не попадает ни под одну из других категорий.
+NotImplementedError - возникает, когда абстрактные методы класса требуют переопределения в дочерних классах.
+SyntaxError - синтаксическая ошибка.
+IndentationError - неправильные отступы.
+TabError - смешивание в отступах табуляции и пробелов.
+SystemError - внутренняя ошибка.
+TypeError - операция применена к объекту несоответствующего типа.
+ValueError - функция получает аргумент правильного типа, но некорректного значения.
+UnicodeError - ошибка, связанная с кодированием / раскодированием unicode в строках.
+UnicodeEncodeError - исключение, связанное с кодированием unicode.
+UnicodeDecodeError - исключение, связанное с декодированием unicode.
+UnicodeTranslateError - исключение, связанное с переводом unicode.
+Warning - предупреждение.
+"""
+    
+#############################################################
+ДЕСКРИПТОРЫ
+
+class DIRECTORY:
+    def __init__(self, x, y, z):
+        self._x = 'directory'
+        self._y = 'data'
+        self._z = 'file'
+        
+    @classmethod
+    def verify_d(cls, data):
+        if type(data) != int:
+            raise TypeError("int please")
+    @property
+    def x(self):
+        return self._x
+ 
+    @x.setter
+    def x(self, data):
+        self.verify_d(data)
+        self._x = data
+ 
+    @property
+    def y(self):
+        return self._y
+ 
+    @y.setter
+    def y(self, data):
+        self.verify_d(data)
+        self._y = data
+ 
+    @property
+    def z(self):
+        return self._z
+ 
+    @z.setter
+    def z(self, data):
+        self.verify_d(data)
+        self._z = data
+        
+class DIRECTORY:
+    def __init__(self, x, y, z):
+        self.x = x
+        self.y = y
+        self.z = z
+        
+p = DIRECTORY( 'directory', 'data', 'file')
+print(p.__dict__)
+"""
+Как видим, в коде есть повторения, повторные сеттерыперегружают память и создают лишний обьем, 
+что вызывает в свою очередь, необходимость рефакторинга.
+"""
+###########################################################
+# Вот более компактный пример с использованием магических методов языка:
+
+class DIRECTORY:
+    def __set_name__(self, owner, name):
+        self.name = "_" + name
+ 
+    def __get__(self, instance, owner):
+        return instance.__dict__[self.name]
+ 
+    def __set__(self, instance, value):
+        print(f"__set__: {self.name} = {value}")
+        instance.__dict__[self.name] = value
+        
+class DIRECTORY:
+    x = DIRECTORY()
+    y = DIRECTORY()
+    z = DIRECTORY()
+ 
+    def __init__(self, x, y, z):
+        self.x = x
+        self.y = y
+        self.z = z
+        
+p = DIRECTORY('directory', 'data', 'file')
+print(p.__dict__)
+##########################################################
+
+from functools import lru_cache
+
+@lru_cache
+def f(n):
+    print(f'ВЫКЛАДКА {n} БИНАРНОЙ ПОСЛЕДОВАТЕЛЬНОСТИ')
+    if n < 2:
+        return 1
+    return f(n-2) + f(n-1)
+
+
+f(22)
